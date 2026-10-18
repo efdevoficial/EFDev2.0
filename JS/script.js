@@ -240,3 +240,29 @@ window.addEventListener("scroll", updateScrollProgress, {
 window.addEventListener("resize", updateScrollProgress);
 
 updateScrollProgress();
+
+
+async function carregarVersao() {
+  const elemento = document.getElementById("app-version");
+
+  if (!elemento) return;
+
+  try {
+    const resposta = await fetch(
+      `./version.json?t=${Date.now()}`
+    );
+
+    if (!resposta.ok) {
+      throw new Error("Não foi possível carregar a versão.");
+    }
+
+    const dados = await resposta.json();
+
+    elemento.textContent = `V${dados.version}`;
+  } catch (erro) {
+    elemento.textContent = "Versão indisponível";
+    console.error("Erro ao carregar versão:", erro);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", carregarVersao);
